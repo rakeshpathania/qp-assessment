@@ -9,7 +9,9 @@
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:migrate:up": "npx typeorm-ts-node-esm migration:run -d src/database/dataSource.ts",
-    "db:migrate:down": "npx typeorm-ts-node-esm migration:revert -d src/database/dataSource.ts"
+    "db:migrate:down": "npx typeorm-ts-node-esm migration:revert -d src/database/dataSource.ts",
+    "db:migrate:up:prod": "NODE_ENV=production npx typeorm migration:run -d dist/database/dataSource.js",
+    "db:migrate:down:prod": "NODE_ENV=production node --loader ts-node/esm ./dist/database/dataSource.js migration:revert"
   },
   "keywords": [],
   "author": "",

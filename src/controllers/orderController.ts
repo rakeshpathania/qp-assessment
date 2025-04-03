@@ -12,7 +12,7 @@ const createOrder = async (req: RequestWithUser, res: Response, next: NextFuncti
         const userId = req.user.id;
         const order = await orderService.createOrder(userId, orderRequest);
         res.status(STATUS_CODES.CREATED).json(
-            SUCCESS_CREATED_STATUS("Admin registered successfully", order)
+            SUCCESS_CREATED_STATUS("Order created successfully", order)
         );
     } catch (error) {
         next(error);

@@ -1,3 +1,4 @@
+
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -7,6 +8,7 @@ import groceryRouter from "./routes/groceryRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
+import validateEnv from './config/validateEnv.js';
 // Load environment variables
 dotenv.config();
 
@@ -51,6 +53,7 @@ class Server {
     try {
       logger.info("Initializing database connection...");
       await AppDataSource.initialize();
+      await AppDataSource.runMigrations();
       logger.info("Database connection established successfully.");
     } catch (error) {
       logger.error("Database connection failed:", error);
@@ -87,8 +90,8 @@ class Server {
 
   public async start(): Promise<void> {
     try {
+      validateEnv();
       await this.connectToDatabase();
-
       const server = this.app.listen(this.port, () => {
         logger.info(`Server is running on http://localhost:${this.port}`);
         logger.info(`Server environment: ${process.env.NODE_ENV || "development"}`);

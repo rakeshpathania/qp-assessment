@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - mynetwork
+
+  app:
+    build: .
+    container_name: grocery_management
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      DB_USER: ${DB_USER}
+      DB_NAME: ${DB_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      APP_SECRET: ${APP_SECRET}
+    ports:
+      - "5000:5000"
+    networks:
+      - mynetwork
+    entrypoint: ["sh", "-c", "/app/wait-for-it.sh postgres:5432 -- yarn db:migrate:up:prod && yarn start"]
+
+volumes:
+  pgdata:
+
+networks:
+  mynetwork:
+    driver: bridge

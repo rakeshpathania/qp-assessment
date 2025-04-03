@@ -1,8 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const APP_SECRET = process.env.APP_SECRET || "your_jwt_secret";
-
+const APP_SECRET = process.env.APP_SECRET || "";
 export const GenerateSalt = async (rounds: number = 10): Promise<string> => {
     return await bcrypt.genSalt(rounds);
 };
